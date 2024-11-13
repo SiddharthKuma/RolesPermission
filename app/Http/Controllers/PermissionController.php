@@ -71,8 +71,16 @@ class PermissionController extends Controller
         }
     }
     //This method will delete  a permission in DB
-    public function destroy(){
-
+    public function destroy(Request $request){
+        $id = request()->id;
+        $permission = Permission::findOrFail($id);
+        if($permission == null){
+            session()->flash('error','Permission not found');
+            return response()->json(['status'=>false]);
+        }
+      $permission->delete();
+      session()->flash('success','Permission deleted successfully.');
+      return response()->json(['status'=>true]);
     }
 }
 
